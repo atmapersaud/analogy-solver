@@ -62,7 +62,7 @@ def solve(model, data):
             #~ print(line[0] + " : " + line[1] + " :: " + line[2*(i+1)] + " : " + line[2*(i+1)+1] + " = " + str(cos[i]))
         index = cos.index(max(cos))
         #~ print(cos[index])
-        if(chr(index+65) == line[10]):
+        if(chr(index+97) == line[10]):
             print(True)
         else:
             print(False)
