@@ -18,20 +18,23 @@ def generate_formatted_data(data):
         result.append("{}".format(line[9].lower()))
     return result
 
-def compare(result, predict):
-    for i in range(len(result)):
-        #~ print(result[i], end=", ")
-        if(predict[i][0] == "Out of dictionary word!"):
-            print("Out of dictionary word!")
-            continue            
-        flag = True        
-        for j in range(100):
-            if(result[i] == predict[i][j*2]):
-                print("{}, {}".format(j, predict[i][j*2+1]))
-                flag = False
-                break                
-        if(flag):
-            print()
+def compare(data, predict):
+    for i in range(len(data)):
+        ans = data[i][10]
+        
+        pred = list()
+        for j in range(4):
+            if(predict[4*i+j] and predict[4*i+j][0] != "Out of dictionary word!"):
+                pred.append(int(predict[4*i+j][0]) + 1)
+            else:
+                pred.append(0)
+       
+        index = pred.index(max(pred))
+       
+        if(chr(index+64) == ans):
+            print(True)
+        else:
+            print(False)
 
 def main():
     import argparse
@@ -41,11 +44,9 @@ def main():
     args = parser.parse_args()
     
     data = read_csv_file_data(args.FILE1)
-    result = generate_formatted_data(data)
-    
     predict = read_csv_file_data(args.FILE2)
     
-    compare(result, predict)
+    compare(data, predict)
 
 
 if __name__ == '__main__':

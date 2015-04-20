@@ -1559,9 +1559,9 @@ senator legislature battleship
 senator legislature predator
 senator legislature introvert
 extrovert gregarious jingoist
-extrovert gregarious judge: deciduous
-extrovert gregarious amorous
-extrovert gregarious shrewd
+extrovert gregarious judge
+extrovert gregarious philanthropist
+extrovert gregarious businessman
 suspect credibility dubious
 suspect credibility conventional
 suspect credibility controversial
