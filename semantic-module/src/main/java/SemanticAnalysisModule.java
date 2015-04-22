@@ -13,10 +13,17 @@ import org.openrdf.repository.sparql.SPARQLRepository;
 
 public class SemanticAnalysisModule {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws RepositoryException {
 		// TODO Auto-generated method stub
 		System.out.println("test");
-	}
+		String userQuery = "SELECT DISTINCT ?s ?label WHERE { "
+        	+ "?s rdfs:label ?label . "
+        	+ "FILTER (lang(?label) = 'en'). "
+        	+ "?label bif:contains \"disease\" . "
+        	+ "?s dcterms:subject ?sub"
+			+ "} ";
+		performSparqlQuery(userQuery);
+ 	}
 	
 public static void performSparqlQuery(String userQuery) throws RepositoryException{
 		
@@ -40,7 +47,7 @@ public static void performSparqlQuery(String userQuery) throws RepositoryExcepti
 					BindingSet bindingSet = result.next();
 					for(String s : columnNames){
 						Value val = bindingSet.getValue(s);
-						//System.out.println(" | " + val.stringValue() +" | ");	
+						System.out.println(" | " + val.stringValue() +" | ");	
 						//save this value in db table
 					}
 				}
