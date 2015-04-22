@@ -53,16 +53,16 @@ def solve(model, data):
             if(len(model[line[i]]) == 0):
                 print("Out of dictionary word!")
                 flag = True
-                continue
+                break
         if(flag):
             continue
         cos = list()
-        for i in range(4):
+        for i in range(int((len(line)-1)/2)-1):
             cos.append(CalculateCosineSimilarity(model[line[2*(i+1)+1]], model[line[1]]) + CalculateCosineSimilarity(model[line[2*(i+1)+1]], model[line[2*(i+1)]]) - CalculateCosineSimilarity(model[line[2*(i+1)+1]], model[line[0]]))
             #~ print(line[0] + " : " + line[1] + " :: " + line[2*(i+1)] + " : " + line[2*(i+1)+1] + " = " + str(cos[i]))
         index = cos.index(max(cos))
         #~ print(cos[index])
-        if(chr(index+97) == line[10]):
+        if(chr(index+97) == line[-1]):
             print(True)
         else:
             print(False)
