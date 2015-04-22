@@ -93,7 +93,7 @@ CUSHION, SOFA, faucet, sink, toilet, kitchen, necklace, dress, dollar, wallet, A
 JAZZ, MUSIC, silver, metal, window, glass, water, pool, juice, fruit, A
 ANCIENT, OLD, crazy, unhealthy, delicious, tasty, smart, intelligent, rusty, old, B
 BOULDER, HEAVY, ring, beautiful, steak, good, beach, sunny, mountain, tall, D
-MIRCROSCOPE, EXAMINE, letter, communicate, sweater, knit, ball, hit, game, score, A
+MICROSCOPE, EXAMINE, letter, communicate, sweater, knit, ball, hit, game, score, A
 ICE, SLIPPERY, basketball, fun, cake, delicious, paper, thin, chalk, white, C
 DEPRESSED, SAD, peaceful, bored, sweet, strong, ready, anxious, elated, happy, D
 SPEAKERS, STEREO, arms, legs, feet, toes, wings, airplane, clouds, sky, C
@@ -105,7 +105,7 @@ BROTHER, SIBLING, mother, daughter, doctor, nurse, uncle, aunt, father, parent, 
 HUMILIATED, EMBARRASSED, shy, timid, enraged, angry, sad, upset, excited, anxious, B
 TRAIN, RAILROAD, boat, mountain, helicopter, cloud, truck, highway, wagon, wheel, C
 SKEPTICAL, BELIEF, unpopular, wealth, homeless, shelter, polite, power, nervous, stress, B
-OPTIMISM, PESIMISSM, success, failure, food, hunger, motivation, dedication, maturity, youth, A
+OPTIMISM, PESSIMISM, success, failure, food, hunger, motivation, dedication, maturity, youth, A
 SUNSCREEN, SKIN, magic, children, grass, house, armor, body, faith, country, C
 SPAGHETTI, PASTA, ketchup, condiment, lettuce, sauce, bacon, fruit, cereal, dairy, A
 LIAR, HONESTY, lawyer, mercy, mother, children, fool, wisdom, soldier, power, C
@@ -331,7 +331,7 @@ EUPHEMISM, POLITE, prophet, rogue, metaphor, literal, expletive, vulgar, sonnet,
 AGNOSTIC, BELIEF, lummox, grace, reputation, notoriety, predecessor, origin, tyrant, prerogative, A
 PALLIATIVE, RELIEVE, predicament, solve, tonic, dissolve, deterrent, dissuade, correspondent, sanction, C
 EXORCISM, DEMONS, putsch, government, sin, evil, nation, expatriates, cave, stalagmites, A
-GROUCH, CANTAKEROUS, conspiracy, successful, magnate, magnanimous, building, ramshackle, palace, ornate, D
+GROUCH, CANTANKEROUS, conspiracy, successful, magnate, magnanimous, building, ramshackle, palace, ornate, D
 INCIPIENT, MATURE, prescient, correct, analogous, comparable, destitute, affluent, unctuous, oily, C
 SUCCULENT, RICH, caustic, relaxing, amiable, indifferent, bloodthirsty, violent, farcical, funny, C
 CAUCUS, MEETING, chef, entrée, dissertation, degree, paleontologist, scientist, salute, capitulation, C
