@@ -4,6 +4,7 @@ import sys
 import argparse
 import numpy as np
 from scipy import sparse
+from scipy.sparse import linalg
 
 def main():
     infile = open(sys.argv[1])
@@ -61,6 +62,8 @@ def main():
     Fsc = F.tocsc()
     # compute PMI
     # compute SVD
+    u, s, v_t = linalg.svds(Fsr, k=200)
+    dim_reduced = np.dot(u,s)
 
     infile.close()
     outfile.close()
