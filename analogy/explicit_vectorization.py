@@ -5,6 +5,7 @@ import argparse
 import numpy as np
 from scipy import sparse
 from scipy.sparse import linalg
+from sklearn.decomposition import TruncatedSVD
 
 def main():
     infile = open(sys.argv[1])
@@ -66,9 +67,11 @@ def main():
     for i,j,v in zip(F.row, F.col, F.data):
         F[i,j] = max( math.log((v * corpus_size) / (word_freqs[i] * context_freqs[j])), 0 )
 
-    # compute SVD
-    u, s, v_t = linalg.svds(F, k=200)
-    dim_reduced = np.dot(u, s)
+    # compute TruncatedSVD
+    svd = TruncatedSVD(n_components=200)
+    Fred = svd.fit_transform(F)
+
+    np.savetxt(outfile, Fred, delimiter=',')
 
     infile.close()
     outfile.close()
