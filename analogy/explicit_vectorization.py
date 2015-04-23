@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-
 import sys
+import math
 import argparse
 import numpy as np
 from scipy import sparse
@@ -12,10 +12,13 @@ def main():
     vocabfile = open(sys.argv[3])
     vdict = json.load(vocabfile)
 
-    F = sparse.lil_matrix((len(vdict), 4*len(vdict)))
+    F = sparse.coo_matrix((len(vdict), 4*len(vdict)))
+    corpus_size = 0
+
     for line in infile:
         words = line.split()
         num_words = len(words)
+        corpus_size += num_words
 
         if num_words < 2:
             continue
@@ -56,14 +59,16 @@ def main():
                 F[vocab[word], 4 * vocab[words[i+1]] + 2] += 1
                 F[vocab[word], 4 * vocab[words[i+2]] + 3] += 1
                 
-    # convert to sparse mat representation
-    # put a pause here to check memory
-    Fsr = F.tocsr()
-    Fsc = F.tocsc()
     # compute PMI
+    word_freqs = F.sum(1)
+    context_freqs = F.sum(0)
+
+    for i,j,v in zip(F.row, F.col, F.data):
+        F[i,j] = max( math.log((v * corpus_size) / (word_freqs[i] * context_freqs[j])), 0 )
+
     # compute SVD
-    u, s, v_t = linalg.svds(Fsr, k=200)
-    dim_reduced = np.dot(u,s)
+    u, s, v_t = linalg.svds(F, k=200)
+    dim_reduced = np.dot(u, s)
 
     infile.close()
     outfile.close()
