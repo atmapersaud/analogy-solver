@@ -11,11 +11,11 @@ from sklearn.decomposition import TruncatedSVD
 
 def main():
     infile = open(sys.argv[1])
-    outfile = open(sys.argv[2], 'w')
+    outfile = sys.argv[2] #needs to be a string
     vocabfile = open(sys.argv[3])
     vocab = json.load(vocabfile)
 
-    F = sparse.dok_matrix((len(vdict), 4*len(vdict)), dtype=np.int32)
+    F = sparse.lil_matrix((len(vdict), 4*len(vdict)), dtype=np.int32)
     corpus_size = 0
     lc = 0
 
@@ -55,6 +55,8 @@ def main():
     Fc = F.tocoo()
     word_freqs = Fc.sum(1)
     context_freqs = Fc.sum(0)
+    word_freqs = word_freqs.A1
+    context_freqs = context_freqs.A1
 
     for i,j,v in zip(Fc.row, Fc.col, Fc.data):
         F[i,j] = max( math.log((v * corpus_size) / (word_freqs[i] * context_freqs[j])), 0 )
@@ -66,7 +68,6 @@ def main():
     np.savetxt(outfile, Fred, delimiter=',')
 
     infile.close()
-    outfile.close()
     vocabfile.close()
 
 def process_short_line(num_words, words, F, vocab):
