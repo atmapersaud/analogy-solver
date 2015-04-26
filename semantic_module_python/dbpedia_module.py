@@ -118,6 +118,7 @@ def main():
 
 	flag1 = checkExists(word1)
 	flag3 = checkExists(word3)
+	finalList = list()
 
 	if(flag1 and flag3):
 		pred = getPredicates(word1,word2)
@@ -138,11 +139,11 @@ def main():
 		# print priorityAns
 		# print otherAns
 
-		finalList = list()
+		
 		finalList.extend(priorityAns)
 		finalList.extend(otherAns)
 
-		print finalList
+	print finalList
         
 if __name__ == "__main__":
     main()
