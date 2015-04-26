@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 import org.openrdf.query.QueryLanguage;
@@ -48,11 +49,196 @@ public class SemanticAnalysisModule {
 //			out.println(s);
 //		out.close();
 		
-		String word1 = "Bill_Gates";
-		List<String> linksWord1 = getResourceLinksForWord(word1);
+		String word1 = "Bill Gates", word2 = "Microsoft", word3 = "Steve Jobs";
+		word1 = word1.replaceAll(" ", "_");
+		word2 = word2.replaceAll(" ", "_");
+		word3 = word3.replaceAll(" ", "_");
 		Boolean flag = checkExists("http://dbpedia.org/resource/"+word1);
 		System.out.println(flag);
+		
+		Boolean flag3 = checkExists("http://dbpedia.org/resource/"+word3);
+		System.out.println(flag3);
+		
+		if(flag && flag3)
+		{
+			Set<String> predicates = getRelevantPredicates("http://dbpedia.org/resource/"+word1,word2);
+			
+			Set<String> priorityPredicates = getPriorityPredicates("http://dbpedia.org/resource/"+word1,word2);
+			
+			for(String s : priorityPredicates){
+				if(predicates.contains(s))
+					predicates.remove(s);
+			}
+			
+			Set<String> priorityAnswers = getWord4Matches("http://dbpedia.org/resource/"+word3,priorityPredicates);
+			Set<String> answer = getWord4Matches("http://dbpedia.org/resource/"+word3,predicates);
+			
+			System.out.println("--------------");
+			for(String word : priorityAnswers){
+				if(StringUtils.countMatches(word.trim(), " ")<4)
+					System.out.println(word);
+			}
+			System.out.println("--------------");
+			for(String word : answer){
+				if(StringUtils.countMatches(word.trim(), " ")<4)
+					System.out.println(word);
+			}
+		}
+		
+		
  	}
+	
+	public static Set<String> getWord4Matches(String word3, Set<String> predicates) throws RepositoryException{
+
+		//endpointUrl should be initially asked from the user and saved as a global parameter or user-settings-parameter
+		String endpointUrl = "http://dbpedia.org/sparql"; 
+		Repository repo = new SPARQLRepository(endpointUrl);
+		repo.initialize();
+		RepositoryConnection con = repo.getConnection();
+		Set<String> relations = new HashSet<String>();
+		for(String pred : predicates){
+			String query = "PREFIX schema: <http://schema.org/> "
+				+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+				+ "PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> "
+				+ "SELECT DISTINCT ?x "
+				+ "WHERE "
+				+ "{ <"+word3+"> <"+pred+"> ?x. "
+				+ "} ";
+			System.out.println(query);
+	
+				
+			try {
+				String queryString = query;
+	
+				TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+				TupleQueryResult result = tupleQuery.evaluate();
+				List<String> columnNames = result.getBindingNames();
+				
+				try {
+					while (result.hasNext()) { // iterate over the result
+						BindingSet bindingSet = result.next();
+						for(String s : columnNames){
+							Value val = bindingSet.getValue(s);
+							System.out.println(" | " + val.stringValue() +" | ");	
+							relations.add(val.stringValue());
+						}
+					}
+				} finally {
+					result.close();
+				}
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				con.close();
+			}
+		}
+		return relations;
+	}
+	
+	public static Set<String> getRelevantPredicates(String word1, String word2) throws RepositoryException{
+
+		//endpointUrl should be initially asked from the user and saved as a global parameter or user-settings-parameter
+		String endpointUrl = "http://dbpedia.org/sparql"; 
+		Repository repo = new SPARQLRepository(endpointUrl);
+		repo.initialize();
+		RepositoryConnection con = repo.getConnection();
+		Set<String> relations = new HashSet<String>();
+		
+		String query = "PREFIX schema: <http://schema.org/> "
+			+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+			+ "PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> "
+			+ "SELECT DISTINCT ?x "
+			+ "WHERE "
+			+ "{ <"+word1+"> "
+			+ "?x ?y. "
+			+ "?y bif:contains \""+word2+"\" . "
+			+ "} ";
+		System.out.println(query);
+
+			
+		try {
+			String queryString = query;
+
+			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+			TupleQueryResult result = tupleQuery.evaluate();
+			List<String> columnNames = result.getBindingNames();
+			
+			try {
+				while (result.hasNext()) { // iterate over the result
+					BindingSet bindingSet = result.next();
+					for(String s : columnNames){
+						Value val = bindingSet.getValue(s);
+						String s1 = val.stringValue();
+						//if(s1.contains("/"))
+							//s1 = s1.substring(s1.lastIndexOf('/')+1);
+						relations.add(s1);
+						System.out.println(" | " + s1 +" | ");	
+					}
+				}
+				return relations;
+			} finally {
+				result.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return relations;
+		} finally {
+			con.close();
+		}
+	}
+	
+	public static Set<String> getPriorityPredicates(String word1, String word2) throws RepositoryException{
+
+		//endpointUrl should be initially asked from the user and saved as a global parameter or user-settings-parameter
+		String endpointUrl = "http://dbpedia.org/sparql"; 
+		Repository repo = new SPARQLRepository(endpointUrl);
+		repo.initialize();
+		RepositoryConnection con = repo.getConnection();
+		Set<String> relations = new HashSet<String>();
+		
+		String query = "PREFIX schema: <http://schema.org/> "
+			+ "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> "
+			+ "PREFIX dbpedia-owl: <http://dbpedia.org/ontology/> "
+			+ "SELECT DISTINCT ?x "
+			+ "WHERE "
+			+ "{ <"+word1+"> "
+			+ "?x ?y. "
+			+ "FILTER (?y = \""+word2+"\" or ?y = <http://dbpedia.org/resource/"+word2+">)"
+			+ "} ";
+		System.out.println(query);
+
+			
+		try {
+			String queryString = query;
+
+			TupleQuery tupleQuery = con.prepareTupleQuery(QueryLanguage.SPARQL, queryString);
+			TupleQueryResult result = tupleQuery.evaluate();
+			List<String> columnNames = result.getBindingNames();
+			
+			try {
+				while (result.hasNext()) { // iterate over the result
+					BindingSet bindingSet = result.next();
+					for(String s : columnNames){
+						Value val = bindingSet.getValue(s);
+						String s1 = val.stringValue();
+						//if(s1.contains("/"))
+							//s1 = s1.substring(s1.lastIndexOf('/')+1);
+						relations.add(s1);
+						System.out.println(" | " + s1 +" | ");
+					}
+				}
+				return relations;
+			} finally {
+				result.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return relations;
+		} finally {
+			con.close();
+		}
+	}
 	
 public static Boolean checkExists(String word) throws RepositoryException{
 		
