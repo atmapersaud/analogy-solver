@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   }
   fscanf(f, "%lld", &words);
   fscanf(f, "%lld", &size);
-  printf("%lld\n%lld\n", words, size);
+  //~ printf("%lld\n%lld\n", words, size);
   
   vocab = (char *)malloc((long long)words * max_w * sizeof(char));
   M = (float *)malloc((long long)words * (long long)size * sizeof(float));
