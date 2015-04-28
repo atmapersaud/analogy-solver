@@ -1,5 +1,5 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
-import sys, json, unicodedata, re, urllib2
+import sys, json, unicodedata, re
 def checkExists(word):
 	sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 	queryString = 'select DISTINCT ?a where { <'+word+'> ?a ?r }'
@@ -114,12 +114,6 @@ def main():
 
 	word1 = "http://dbpedia.org/resource/"+word1
 	word3 = "http://dbpedia.org/resource/"+word3
-
-	# file = urllib2.urlopen('http://lookup.dbpedia.org/api/search.asmx/KeywordSearch?QueryString='+word1)
-	# data = file.read()
-	# file.close()
-	# #data = xmltodict.parse(data)
-	# print data
 
 	flag1 = checkExists(word1)
 	flag3 = checkExists(word3)
