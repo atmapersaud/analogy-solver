@@ -1,5 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 import sys, json, unicodedata, re
+
 def checkExists(word):
 	sparql = SPARQLWrapper("http://dbpedia.org/sparql")
 	queryString = 'select DISTINCT ?a where { <'+word+'> ?a ?r }'
@@ -96,53 +97,77 @@ def title_except_helpers(s):
    	return " ".join(final)
 
 def main():
-	word1 = raw_input()
-	word2 = raw_input()
-	word3 = raw_input()
+	try:
+		word1 = raw_input()
+		word2 = raw_input()
+		word3 = raw_input()
 
-	word1 = ' '.join(word1.split())
-	word2 = ' '.join(word2.split())
-	word3 = ' '.join(word3.split())
+		if ' ' in word1:
+			word1 = ' '.join(word1.split())
+			word1 = title_except_helpers(word1)
+			word1 = word1.replace(' ','_')
 
-	word1 = title_except_helpers(word1)
-	word2 = title_except_helpers(word2)
-	word3 = title_except_helpers(word3)
+		if ' ' in word2:
+			word2 = ' '.join(word2.split())
+			word2 = title_except_helpers(word2)
+			word2 = word1.replace(' ','_')
 
-	word1 = word1.replace(' ','_')
-	word2 = word2.replace(' ','_')
-	word3 = word3.replace(' ','_')
+		if ' ' in word2:
+			word3 = ' '.join(word3.split())
+			word3 = title_except_helpers(word3)
+			word3 = word3.replace(' ','_')
 
-	word1 = "http://dbpedia.org/resource/"+word1
-	word3 = "http://dbpedia.org/resource/"+word3
+		word1 = "http://dbpedia.org/resource/"+word1
+		word3 = "http://dbpedia.org/resource/"+word3
 
-	flag1 = checkExists(word1)
-	flag3 = checkExists(word3)
-	finalList = list()
+		flag1 = 0
+		try:
+			flag1 = checkExists(word1)
+		except Exception: 
+	  		pass
+	  	flag3 = 0
+	  	try:
+			flag3 = checkExists(word3)
+		except Exception: 
+	  		pass
+		finalList = list()
 
-	if(flag1 and flag3):
-		pred = getPredicates(word1,word2)
-		priorityPred = getPriorityPredicates(word1,word2)
+		if(flag1 and flag3):
+			pred = []
+			try:
+				pred = getPredicates(word1,word2)
+			except Exception: 
+	  			pass
+	  		priorityPred = []
+	  		try:
+				priorityPred = getPriorityPredicates(word1,word2)
+			except Exception: 
+	  			pass
+			#print "----------------"
+			priorityAns = []
+			try:
+				priorityAns = getWord4Matches(word3,priorityPred)
+			except Exception: 
+	  			pass
+			priorityAns = list(set(priorityAns))
+			#print "----------------"
+			otherAns = []
+			try:
+				otherAns = getWord4Matches(word3,pred)
+			except Exception: 
+	  			pass
+			otherAns = list(set(otherAns))
 
-		#print "----------------"
-		priorityAns = getWord4Matches(word3,priorityPred)
-		priorityAns = list(set(priorityAns))
-		#print "----------------"
-		otherAns = getWord4Matches(word3,pred)
-		otherAns = list(set(otherAns))
+			for s in priorityAns:
+				if s in otherAns:
+					otherAns.remove(s)
+			
+			finalList.extend(priorityAns)
+			finalList.extend(otherAns)
 
-		for s in priorityAns:
-			if s in otherAns:
-				otherAns.remove(s)
-
-		# print "----------------"
-		# print priorityAns
-		# print otherAns
-
-		
-		finalList.extend(priorityAns)
-		finalList.extend(otherAns)
-
-	print finalList
+		return finalList
+	except Exception: 
+	  	return list()
         
 if __name__ == "__main__":
     main()
