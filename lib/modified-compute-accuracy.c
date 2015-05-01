@@ -33,12 +33,12 @@ int main(int argc, char **argv)
   float *M;
   char *vocab;
   int TCN, CCN = 0, TACN = 0, CACN = 0, SECN = 0, SYCN = 0, SEAC = 0, SYAC = 0, QID = 0, TQ = 0, TQS = 0;
-  /*
+
   FILE *fp;
   int status;
   char query[100];
   char path[100];
-  */
+
   if (argc < 2) {
     printf("Usage: ./compute-accuracy <FILE> <threshold>\nwhere FILE contains word projections, and threshold is used to reduce vocabulary of the model for fast approximate evaluation (0 = off, otherwise typical value is 30000)\n");
     return 0;
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
     for (a = 0; a < size; a++) vec[a] = (M[a + b2 * size] - M[a + b1 * size]) + M[a + b3 * size];
     TQS++;
     // INSERT LOGIC HERE
-    /*
+
     strcpy(path, "");
 
     strcpy(query, "python answer-eval.py ");
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
     fgets(path, 100, fp);
     status = pclose(fp);
     if (status == -1) printf("close error");
-    */
+
     for (c = 0; c < words; c++) {
       if (c == b1) continue;
       if (c == b2) continue;
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
         }
       }
     }
-    /*
+
     if (strlen(path) > 2 && strlen(path) < 100) {
       strcpy(bestw[0], path);
       //printf("result len %d \n", strlen(path));
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
       //printf("%s %s %s %s \n", st1, st2, st3, bestw[0]);
       //printf("%.2f \n", bestd[0]);
     }
-    */
+
     if (!strcmp(st4, bestw[0])) {
       CCN++;
       CACN++;
