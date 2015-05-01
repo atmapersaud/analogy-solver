@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
       continue;
     }
     //INSERTING LOGIC HERE
-    strcpy(query, "python answer.py ");
+    strcpy(query, "python ../analogy/answer.py ");
     strcat(query, st[0]);
     strcat(query, " ");
     strcat(query, st[1]);

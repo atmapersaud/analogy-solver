@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 
     strcpy(path, "");
 
-    strcpy(query, "python answer-eval.py ");
+    strcpy(query, "python ../analogy/answer-eval.py ");
     strcat(query, st1);
     strcat(query, " ");
     strcat(query, st2);
